@@ -76,6 +76,18 @@ public class ArticleController extends Controller {
 
     int id = Integer.parseInt(cmd.split(" ")[2]);
 
+    Article article = articleService.getArticleById(id);
+
+    if(article == null) {
+      System.out.printf("%d번 게시물은 존재하지 않습니다.\n", id);
+      return;
+    }
+
+    if(article.memberId != Container.session.loginedMemberId) {
+      System.out.println("권한이 없습니다.");
+      return;
+    }
+
     System.out.printf("== %d번 게시글 수정 ==\n", id);
     System.out.printf("새 제목 : ");
     String title = sc.nextLine();
@@ -96,17 +108,19 @@ public class ArticleController extends Controller {
 
     int id = Integer.parseInt(cmd.split(" ")[2]);
 
-    System.out.printf("== %d번 게시글 삭제 ==\n", id);
+    Article article = articleService.getArticleById(id);
 
-    boolean articleExists = articleService.articleExists(id);
+    if(article == null) {
+      System.out.printf("%d번 게시물은 존재하지 않습니다.\n", id);
+      return;
+    }
 
-    if (articleExists == false) {
-      System.out.printf("%d번 게시글은 존재하지 않습니다.\n", id);
+    if(article.memberId != Container.session.loginedMemberId) {
+      System.out.println("권한이 없습니다.");
       return;
     }
 
     articleService.delete(id);
-
     System.out.printf("%d번 게시글이 삭제되었습니다.\n", id);
   }
 }
