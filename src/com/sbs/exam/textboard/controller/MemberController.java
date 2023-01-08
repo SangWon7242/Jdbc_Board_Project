@@ -1,5 +1,6 @@
 package com.sbs.exam.textboard.controller;
 
+import com.sbs.exam.textboard.Container;
 import com.sbs.exam.textboard.dto.Member;
 import com.sbs.exam.textboard.service.MemberService;
 
@@ -9,9 +10,8 @@ import java.util.Scanner;
 public class MemberController extends Controller {
   private MemberService memberService;
 
-  public MemberController(Connection conn, Scanner sc) {
-    super(sc);
-    memberService = new MemberService(conn);
+  public MemberController() {
+    memberService = Container.memberService;
   }
 
   public void join(String cmd) {

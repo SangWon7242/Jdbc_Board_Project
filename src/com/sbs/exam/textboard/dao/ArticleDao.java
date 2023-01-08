@@ -1,5 +1,6 @@
 package com.sbs.exam.textboard.dao;
 
+import com.sbs.exam.textboard.Container;
 import com.sbs.exam.textboard.dto.Article;
 import com.sbs.exam.textboard.util.DBUtil;
 import com.sbs.exam.textboard.util.SecSql;
@@ -10,10 +11,6 @@ import java.util.List;
 import java.util.Map;
 
 public class ArticleDao {
-  private Connection conn;
-  public ArticleDao(Connection conn) {
-    this.conn = conn;
-  }
 
   public Article getArticleById(int id) {
     SecSql sql = new SecSql();
@@ -21,7 +18,7 @@ public class ArticleDao {
     sql.append("FROM article");
     sql.append("WHERE id = ?", id);
 
-    Map<String, Object> articleMap = DBUtil.selectRow(conn, sql);
+    Map<String, Object> articleMap = DBUtil.selectRow(Container.conn, sql);
 
     if (articleMap.isEmpty()) {
       return null;
@@ -38,7 +35,7 @@ public class ArticleDao {
       sql.append(", title = ?", title);
       sql.append(", `body` = ?", body);
 
-      int id = DBUtil.insert(conn, sql);
+      int id = DBUtil.insert(Container.conn, sql);
 
       return id;
   }
@@ -49,7 +46,7 @@ public class ArticleDao {
     sql.append("FROM article");
     sql.append("WHERE id = ?", id);
 
-    return DBUtil.selectRowBooleanValue(conn, sql);
+    return DBUtil.selectRowBooleanValue(Container.conn, sql);
   }
 
   public void delete(int id) {
@@ -57,7 +54,7 @@ public class ArticleDao {
     sql.append("DELETE FROM article");
     sql.append("WHERE id = ?", id);
 
-    DBUtil.delete(conn, sql);
+    DBUtil.delete(Container.conn, sql);
   }
 
   public void update(int id, String title, String body) {
@@ -68,7 +65,7 @@ public class ArticleDao {
     sql.append(", `body` = ?", body);
     sql.append("WHERE id = ?", id);
 
-    DBUtil.update(conn, sql);
+    DBUtil.update(Container.conn, sql);
   }
 
   public List<Article> getArticles() {
@@ -77,7 +74,7 @@ public class ArticleDao {
     sql.append("FROM article");
     sql.append("ORDER BY id DESC");
 
-    List<Map<String, Object>> articleListMap = DBUtil.selectRows(conn, sql);
+    List<Map<String, Object>> articleListMap = DBUtil.selectRows(Container.conn, sql);
 
     List<Article> articles = new ArrayList<>();
 
