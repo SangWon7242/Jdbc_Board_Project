@@ -4,9 +4,6 @@ import com.sbs.exam.textboard.Container;
 import com.sbs.exam.textboard.dto.Member;
 import com.sbs.exam.textboard.service.MemberService;
 
-import java.sql.Connection;
-import java.util.Scanner;
-
 public class MemberController extends Controller {
   private MemberService memberService;
 
@@ -14,7 +11,7 @@ public class MemberController extends Controller {
     memberService = Container.memberService;
   }
 
-  public void join(String cmd) {
+  public void join() {
     String loginId;
     String loginPw;
     String loginPwConfirm;
@@ -93,7 +90,7 @@ public class MemberController extends Controller {
     System.out.printf("%d번 회원이 생성 되었습니다.\n", id);
   }
 
-  public void login(String cmd) {
+  public void login() {
     String loginId;
     String loginPw;
 
@@ -147,20 +144,29 @@ public class MemberController extends Controller {
       }
 
       System.out.printf("%s님 환영합니다.\n", member.name);
-      Container.session.loginedMemberId = member.id;
-      Container.session.loginedMember = member;
+      Container.session.login(member);
 
       break;
     }
   }
 
-  public void whoami(String cmd) {
-    if(Container.session.loginedMemberId == -1) {
+  public void whoami() {
+    if(Container.session.isLogined() == false) {
       System.out.println("로그인 상태가 아닙니다.");
     }
     else {
       System.out.println(Container.session.loginedMember.loginId);
     }
 
+  }
+
+  public void logout() {
+    if (Container.session.isLogined() == false) {
+      System.out.println("이미 로그아웃 상태입니다.");
+    }
+    else {
+      Container.session.logout();
+      System.out.println("로그아웃 되었습니다.");
+    }
   }
 }
